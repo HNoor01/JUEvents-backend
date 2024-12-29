@@ -33,7 +33,7 @@ router.get('/', authenticate, async (req, res) => {
         res.json(events);
     } catch (err) {
         console.error(err);
-        res.status(400).json({ error: err.message });
+        res.status(404).json({ message: 'Event not found' });
     }
 });
 
