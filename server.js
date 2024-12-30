@@ -1,39 +1,39 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
-require('dotenv').config();
-const eventRoutes = require('./routes/eventRoutes'); // Import eventRoutes
+const sequelize = require('./models/database');
+const eventRoutes = require('./routes/eventRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const studentsRoutes = require('./routes/studentsRoutes.js');
+const notificationRoutes = require('./routes/notificationRoutes');
+const setupSession = require('./sessionConfig');
 const app = express();
-const userRoutes = require('./routes/userRoutes');
-const Attendance = require('./models/Attendance'); // Import new models
-const Category = require('./models/Category');
-const Notification = require('./models/Notification');
-const Review = require('./models/Review');
-const Role = require('./models/Role');
-
-// Middleware
-app.use(cors());
+setupSession(app);
 app.use(bodyParser.json());
 
-// Basic route to test API
 app.get('/', (req, res) => {
-    res.send('Backend for JUEvents is running!');
+  res.send('Welcome to the Event Management API!');
 });
-app.use('/api/users', userRoutes); // Register userRoutes at /api/users
-app.use('/api/events', eventRoutes); // Event-related routes
-
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-const sequelize = require('./db');
-
-sequelize.sync({ force: false }) // Set `force: true` during development to recreate tables
-    .then(() => {
-        console.log('Database synced successfully with new models');
-    })
-    .catch((err) => {
-        console.error('Error syncing database:', err);
-    });
-const User = require('./models/User');
-const Event = require('./models/Event');
-console.log(userRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/students', studentsRoutes); // api/students/login 
+const PORT = 3000;
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connected!');
+    
+    sequelize.sync({ alter: true })  
+      .then(() => {
+        console.log('Tables synced with the database!');
+        app.listen(PORT, () => {
+          console.log(`Server is running on http://localhost:${PORT}`);
+        });
+      })
+      .catch(err => {
+        console.error('Error syncing tables:', err);
+      });
+  })
+  .catch(error => {
+    console.error('Failed to connect to the database:', error);
+  });
+  
