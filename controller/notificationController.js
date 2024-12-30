@@ -1,11 +1,11 @@
 const Notification = require('../models/notification');
 
-// إضافة إشعار جديد
+
 const addNotification = async (req, res) => {
   try {
     const { student_id, message, notification_type } = req.body;
 
-    // تحقق من صحة المدخلات
+    
     if (!student_id || !message || !notification_type) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
@@ -22,12 +22,10 @@ const addNotification = async (req, res) => {
   }
 };
 
-// تحديث حالة قراءة الإشعار
 const markAsRead = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // التحقق من وجود الإشعار
     const notification = await Notification.findByPk(id);
     if (!notification) {
       return res.status(404).json({ error: 'Notification not found' });
@@ -41,7 +39,7 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// جلب جميع الإشعارات لمستخدم معين
+
 const getNotificationsByStudent = async (req, res) => {
   try {
     const { student_id } = req.params;
