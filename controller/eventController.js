@@ -1,7 +1,7 @@
 const Event = require('../models/event.js');  
 const Notification = require('../models/notification.js'); 
 const Students = require("../models/students.js");
-const Interest = require("../models/interest.js");
+
 
 const allowedLocations = ['Nursing', 'Sciences', 'Sharia', 'Medicine',"Arts",'Agriculture','Physical Education','IT','Business','Languages','Engineering','Archeology and Tourism','Sports Sciences','International Studies','Educational Sciences','Arts and Design','Dental','Rehabilitation','Rights' ];
 const validateTime = (time) => {
@@ -31,25 +31,24 @@ const createEventRequest = async (req, res) => {
             return res.status(400).json({ error: 'Invalid location. Choose a valid location.' });
         }
 
-        // تحقق إذا كان الوقت صالحًا
+       
         if (!validateTime(time)) {
             return res.status(400).json({ error: 'Event time must be between 08:00 AM and 04:00 PM.' });
         }
 
-        // تحقق إذا كان التاريخ ليس في الماضي
         const eventDate = new Date(date);
         const currentDate = new Date();
         if (eventDate < currentDate) {
             return res.status(400).json({ error: 'Date must not be in the past.' });
         }
 
-        // تحقق إذا كان الحدث في يوم عطلة نهاية الأسبوع
+        
         const dayOfWeek = eventDate.getDay();
         if (dayOfWeek === 5 || dayOfWeek === 6) {
             return res.status(400).json({ error: 'Events cannot be scheduled on Friday or Saturday.' });
         }
 
-        // تحقق من وجود حدث آخر في نفس الوقت والموقع
+        
         const existingEvent = await Event.findOne({
             where: {
                 location: location,
@@ -62,7 +61,7 @@ const createEventRequest = async (req, res) => {
             return res.status(400).json({ error: 'This time and location are already booked for an event on this date.' });
         }
 
-        // إذا كان هناك صورة، قم بإضافة رابط الصورة
+        
         let imageUrl = null;
         if (req.file) {
             imageUrl = `/uploads/${req.file.filename}`;
@@ -93,29 +92,29 @@ const createEventRequest = async (req, res) => {
 
 /*const getHomePageEvents = async (req, res) => {
     try {
-        // جلب التاريخ الحالي
+       
         const currentDate = new Date();
         
-        // الحصول على الكلية الخاصة بالمستخدم (نفترض أنها مخزنة في req.user.faculty)
+      
         const college = req.Students.college;
 
-        // جلب الأحداث التي تخص كلية المستخدم
+       
         const forYouEvents = await Event.findAll({
             where: {
-                status: 'Approved', // الحالة: موافق عليها
-                date: { [Op.gte]: currentDate }, // التاريخ: اليوم أو بعده
-                faculty: userFaculty, // الكلية: مطابقة لكلية المستخدم
+                status: 'Approved', // 
+                date: { [Op.gte]: currentDate }, 
+                faculty: userFaculty,
             },
-            order: [['date', 'ASC']], // ترتيب حسب التاريخ تصاعديًا
+            order: [['date', 'ASC']], 
         });
 
         // جلب جميع الأحداث الجامعية المستقبلية
         const uniWideEvents = await Event.findAll({
             where: {
                 status: 'Approved', // الحالة: موافق عليها
-                date: { [Op.gte]: currentDate }, // التاريخ: اليوم أو بعده
+                date: { [Op.gte]: currentDate }, 
             },
-            order: [['date', 'ASC']], // ترتيب حسب التاريخ تصاعديًا
+            order: [['date', 'ASC']],
         });
 
         // إعداد الاستجابة بصيغة منظمة
@@ -214,60 +213,13 @@ const respondToEventRequest = async (req, res) => {
     }
 };
 
-const addInterest = async (req, res) => {
-    try {
-        const { event_Id } = req.params; // استخراج ID الحدث من الرابط
-        const studentId = req.session.student_id; // استخراج ID المستخدم من الجلسة
-        console.log(`Received eventId: ${event_Id}`);
-
-        // تحقق من تسجيل الدخول
-        if (!studentId) {
-            return res.status(401).json({ error: 'Unauthorized. Please log in.' });
-        }
-
-        // تحقق من وجود الحدث
-        const event = await Event.findByPk(event_Id);
-        if (!event) {
-            return res.status(404).json({ error: 'Event not found.' });
-        }
-
-        // التحقق من انتهاء الحدث
-        const eventDateTime = new Date(`${event.date}T${event.time}`);
-        const currentDateTime = new Date();
-        if (currentDateTime > eventDateTime) {
-            return res.status(400).json({ error: 'Cannot add interest for an event that has already ended.' });
-        }
-
-        
-       
-
-        // إضافة الاهتمام مباشرة
-        await Interest.create({
-            student_id: studentId,
-            event_id: event_Id,
-            interest_date: new Date(),
-        });
-
-        // زيادة عدد المهتمين
-        event.interest_count += 1;
-        await event.save();
-
-        return res.status(201).json({
-            message: 'Interest added successfully.',
-            interestCount: event.interest_count,
-        });
-    } catch (error) {
-        console.error('Error adding interest:', error);
-        res.status(500).json({ error: 'Failed to add interest for the event.' });
-        
-    }
-};
 
 
 
 
 
 
-module.exports = { createEventRequest, respondToEventRequest, viewEventDetails , addInterest
+
+module.exports = { createEventRequest, respondToEventRequest, viewEventDetails
    // getHomePageEvents 
 };
