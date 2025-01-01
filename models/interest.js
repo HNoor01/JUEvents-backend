@@ -38,10 +38,10 @@ const Interest = sequelize.define('Interest', {
     tableName: 'event_interests',
     timestamps: false, // إذا لم تكن بحاجة لـ createdAt و updatedAt
 });
-Students.hasMany(Interest, { foreignKey: 'student_id' });
+/*Students.hasMany(Interest, { foreignKey: 'student_id' });
 Interest.belongsTo(Students, { foreignKey: 'student_id' });
 
 Event.hasMany(Interest, { foreignKey: 'event_id' });
-Interest.belongsTo(Event, { foreignKey: 'event_id' });
+Interest.belongsTo(Event, { foreignKey: 'event_id' });*/
 
 module.exports = Interest;
