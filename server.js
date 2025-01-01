@@ -5,6 +5,8 @@ const eventRoutes = require('./routes/eventRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const studentsRoutes = require('./routes/studentsRoutes.js');
 const notificationRoutes = require('./routes/notificationRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const interestRoutes = require('./routes/interestRoutes');
 const setupSession = require('./sessionConfig');
 const app = express();
 setupSession(app);
@@ -16,7 +18,9 @@ app.get('/', (req, res) => {
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/students', studentsRoutes); // api/students/login 
+app.use('/api/students', studentsRoutes); 
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/interests', interestRoutes);
 const PORT = 3000;
 sequelize.authenticate()
   .then(() => {
