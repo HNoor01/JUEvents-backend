@@ -28,12 +28,6 @@ CREATE TABLE `admins` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`admin_id`),
-  UNIQUE KEY `email_6` (`email`),
-  UNIQUE KEY `email_7` (`email`),
-  UNIQUE KEY `email_8` (`email`),
-  UNIQUE KEY `email_9` (`email`),
-  UNIQUE KEY `email_10` (`email`),
-  UNIQUE KEY `email_11` (`email`),
   UNIQUE KEY `email_12` (`email`),
   UNIQUE KEY `email_13` (`email`),
   UNIQUE KEY `email_14` (`email`),
@@ -86,8 +80,17 @@ CREATE TABLE `admins` (
   UNIQUE KEY `email_61` (`email`),
   UNIQUE KEY `email_62` (`email`),
   UNIQUE KEY `email_63` (`email`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `email_2` (`email`)
+  UNIQUE KEY `email_2` (`email`),
+  UNIQUE KEY `email_3` (`email`),
+  UNIQUE KEY `email_4` (`email`),
+  UNIQUE KEY `email_5` (`email`),
+  UNIQUE KEY `email_6` (`email`),
+  UNIQUE KEY `email_7` (`email`),
+  UNIQUE KEY `email_8` (`email`),
+  UNIQUE KEY `email_9` (`email`),
+  UNIQUE KEY `email_10` (`email`),
+  UNIQUE KEY `email_11` (`email`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -137,62 +140,18 @@ DROP TABLE IF EXISTS `event_interests`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event_interests` (
   `interest_id` int NOT NULL AUTO_INCREMENT,
-  `student_id` int DEFAULT NULL,
-  `event_id` int DEFAULT NULL,
+  `student_id` int NOT NULL,
+  `event_id` int NOT NULL,
   `interest_date` datetime NOT NULL,
   PRIMARY KEY (`interest_id`),
   KEY `student_id` (`student_id`),
   KEY `event_id` (`event_id`),
-  CONSTRAINT `event_interests_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
+  CONSTRAINT `event_interests_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `event_interests_ibfk_10` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_11` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_12` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_13` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_14` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_15` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_16` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_17` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_18` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_19` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
-  CONSTRAINT `event_interests_ibfk_20` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_21` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_22` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_23` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_24` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_25` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_26` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_27` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_28` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_29` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `event_interests_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `event_interests_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_30` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_31` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_32` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_33` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_34` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_35` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_36` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_37` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_38` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_39` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `event_interests_ibfk_4` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_40` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_41` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_42` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_43` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_44` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_45` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_46` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_47` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_48` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_49` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `event_interests_ibfk_5` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_50` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_51` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_52` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_53` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `event_interests_ibfk_54` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `event_interests_ibfk_6` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `event_interests_ibfk_7` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `event_interests_ibfk_8` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -292,17 +251,19 @@ DROP TABLE IF EXISTS `reviews`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reviews` (
   `review_id` int NOT NULL AUTO_INCREMENT,
-  `event_id` int DEFAULT NULL,
-  `student_id` int DEFAULT NULL,
-  `rating` int DEFAULT NULL,
+  `rating` int NOT NULL,
   `comment` text,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `student_id` int NOT NULL,
+  `event_id` int NOT NULL,
   PRIMARY KEY (`review_id`),
-  KEY `event_id` (`event_id`),
   KEY `student_id` (`student_id`),
-  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
-  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
+  KEY `event_id` (`event_id`),
+  CONSTRAINT `reviews_ibfk_19` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
+  CONSTRAINT `reviews_ibfk_20` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
   CONSTRAINT `reviews_chk_1` CHECK ((`rating` between 1 and 5))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -311,6 +272,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
+INSERT INTO `reviews` VALUES (1,5,'a7a','2024-12-31 22:19:12','2024-12-31 22:19:12',111,14),(2,5,'a7aaa','2025-01-01 11:07:57','2025-01-01 11:07:57',111,17);
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -340,10 +302,6 @@ LOCK TABLES `students` WRITE;
 INSERT INTO `students` VALUES (111,'Ali','Engineering','http://example.com/path/to/image2.jpg','password123');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'eventsdb'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -354,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-30 20:01:08
+-- Dump completed on 2025-01-02  1:21:13
