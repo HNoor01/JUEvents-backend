@@ -17,8 +17,7 @@ app.get('/', (req, res) => {
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/students', studentsRoutes); 
-app.use('/api/reviews', reviewRoutes);
+app.use('/api/students', studentsRoutes);
 app.use('/api/interests', interestRoutes);
 const PORT = 3000;
 sequelize.authenticate()
