@@ -5,7 +5,6 @@ const eventRoutes = require('./routes/eventRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const studentsRoutes = require('./routes/studentsRoutes.js');
 const notificationRoutes = require('./routes/notificationRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
 const interestRoutes = require('./routes/interestRoutes');
 const setupSession = require('./sessionConfig');
 const app = express();
