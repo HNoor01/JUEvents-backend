@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { createEventRequest, respondToEventRequest,viewEventDetails,
-  //  getHomePageEvents
- } = require('../controller/eventController.js');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
-router.post('/create', createEventRequest);
+const { createEventRequest, respondToEventRequest, viewEventDetails } = require('../controller/eventController.js');
+
+router.post('/', upload.single('image'), createEventRequest);
 router.post('/respond', respondToEventRequest);
-//router.get('/home', getHomePageEvents);
 router.get('/:event_Id', viewEventDetails);
-
 
 module.exports = router;

@@ -10,8 +10,10 @@ const validateTime = (time) => {
 };
 
 const createEventRequest = async (req, res) => {
+    const { name, date, time, location, description, image } = req.body;
+    let imageUrl = image || null;
     try {
-        const { name, description, location, time, date } = req.body;
+
 
       
         const student_id = req.session.student_id;
@@ -20,7 +22,9 @@ const createEventRequest = async (req, res) => {
         if (!student_id) {
             return res.status(401).json({ error: 'Unauthorized. Please log in.' });
         }
-
+        if (req.file) {
+            imageUrl = `/uploads/${req.file.filename}`;
+        }
         
         if (!name || !location || !time || !date) {
             return res.status(400).json({ error: 'All fields are required.' });
@@ -61,8 +65,8 @@ const createEventRequest = async (req, res) => {
             return res.status(400).json({ error: 'This time and location are already booked for an event on this date.' });
         }
 
-        
-        let imageUrl = null;
+
+
         if (req.file) {
             imageUrl = `/uploads/${req.file.filename}`;
         }

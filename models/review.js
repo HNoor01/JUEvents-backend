@@ -1,9 +1,10 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./database'); 
 const Students = require('./students');
+const Events = require('./event'); // Ensure the events model is imported
 
 const Review = sequelize.define('Review', {
-    review_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -12,7 +13,7 @@ const Review = sequelize.define('Review', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'students',  // تأكد من اسم الجدول الصحيح (case-sensitive)
+            model: 'students',
             key: 'student_id'
         }
     },
@@ -20,12 +21,12 @@ const Review = sequelize.define('Review', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'events',  // تأكد من اسم الجدول الصحيح (case-sensitive)
-            key: 'event_id'
+            model: 'events',
+            key: 'id'
         }
     },
     rating: {
-        type: DataTypes.INTEGER,  // تم تصحيح الخطأ الإملائي هنا
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     comment: {
@@ -33,8 +34,8 @@ const Review = sequelize.define('Review', {
         allowNull: true
     }
 }, {
-    tableName: 'reviews',  // تأكد من اسم الجدول في قاعدة البيانات
-    timestamps: true  // استخدم true بدلاً من false إذا كنت تريد تتبع التواريخ
+    tableName: 'reviews',
+    timestamps: true
 });
 
 //Review.belongsTo(Students, { foreignKey: 'student_id' });

@@ -2,7 +2,7 @@ const { DataTypes, Sequelize } = require('sequelize');
 const sequelize = require('./database');
 
 const Event = sequelize.define('Event', {
-  event_id: {
+  id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
@@ -10,8 +10,8 @@ const Event = sequelize.define('Event', {
   },
   created_at: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false,
+    allowNull: true,
+    defaultValue: Sequelize.NOW,
   },
   created_by: {
     type: DataTypes.INTEGER,
@@ -63,7 +63,7 @@ const Event = sequelize.define('Event', {
     type: DataTypes.DATE,
     allowNull: true,
   },
-  responsed_by: {
+  responded_by: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },

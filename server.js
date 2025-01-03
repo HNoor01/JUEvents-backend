@@ -10,39 +10,38 @@ const interestRoutes = require('./routes/interestRoutes');
 const setupSession = require('./sessionConfig');
 const app = express();
 
+// Middleware
 app.use(bodyParser.json());
+setupSession(app);
 
+// Default Route
 app.get('/', (req, res) => {
-  res.send('Welcome to the Event Management API!');
+    res.json({ message: 'Welcome to the Event Management API!' });
 });
+
+// API Routes
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/students', studentsRoutes);
 app.use('/api/interests', interestRoutes);
-app.use('/api/interests', interestRoutes);
 app.use('/api/reviews', reviewRoutes);
-setupSession(app);
+
+// Port
 const PORT = 3000;
+
+// Database Connection
 sequelize.authenticate()
-  .then(() => {
-    console.log('Database connected!');
-    
-    sequelize.sync({ alter: true })  
-      .then(() => {
+    .then(() => {
+        console.log('Database connected!');
+        return sequelize.sync({ alter: true });
+    })
+    .then(() => {
         console.log('Tables synced with the database!');
         app.listen(PORT, () => {
-          console.log(`Server is running on http://localhost:${PORT}`);
+            console.log(`Server is running on http://localhost:${PORT}`);
         });
-      })
-      .catch(err => {
-        console.error('Error syncing tables:', err);
-      });
-  })
-  .catch(error => {
-    console.error('Failed to connect to the database:', error);
-  });
-sequelize.sync({ alter: true }) // Ensures the table is created or updated
-    .then(() => console.log('Database connected and tables synced'))
-    .catch(err => console.error('Error syncing tables:', err));
-
+    })
+    .catch(err => {
+        console.error('Error initializing the application:', err);
+    });

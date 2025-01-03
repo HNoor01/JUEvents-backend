@@ -13,7 +13,7 @@ const Interest = sequelize.define('Interest', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Students', // اسم الجدول المرتبط
+            model: 'students', // اسم الجدول المرتبط
             key: 'student_id', // المفتاح الأساسي في جدول الطلاب
         },
         onUpdate: 'CASCADE',
@@ -23,8 +23,8 @@ const Interest = sequelize.define('Interest', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Events', // اسم الجدول المرتبط
-            key: 'event_id', // المفتاح الأساسي في جدول الأحداث
+            model: 'events', // اسم الجدول المرتبط
+            key: 'id', // المفتاح الأساسي في جدول الأحداث
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
