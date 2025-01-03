@@ -17,6 +17,11 @@ const Review = sequelize.define('Review', {
             key: 'student_id'
         }
     },
+    photos: {
+        type: DataTypes.TEXT, // To store comma-separated photo URIs
+        allowNull: true,
+    },
+
     event_id: {
         type: DataTypes.INTEGER,
         allowNull: false,

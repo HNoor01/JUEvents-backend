@@ -12,4 +12,9 @@ sequelize
     .then(() => console.log('MySQL connected successfully'))
     .catch((err) => console.error('Unable to connect to MySQL:', err));
 
+// Synchronize database schema
+sequelize.sync({ alter: true }) // Alter the schema to match the model
+    .then(() => console.log('Database synchronized.'))
+    .catch((err) => console.error('Error synchronizing database:', err));
+
 module.exports = sequelize;
