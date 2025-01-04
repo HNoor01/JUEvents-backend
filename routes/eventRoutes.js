@@ -5,6 +5,7 @@ const upload = multer({ dest: 'uploads/' });
 
 const {
     getAllEvents,
+    getAllEventsAdmin,
     createEventRequest,
     respondToEventRequest,
     viewEventDetails,
@@ -13,6 +14,9 @@ const {
 
 // Route to fetch all events
 router.get('/', getAllEvents);
+
+// Route to fetch all events
+router.get('/admin', getAllEventsAdmin);
 
 // Route to create an event with image upload
 router.post('/', upload.single('image'), createEventRequest);

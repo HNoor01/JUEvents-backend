@@ -75,6 +75,7 @@ const Event = sequelize.define('Event', {
     allowNull: true,
   },
   attendanceCode: {
+    
     type: DataTypes.STRING,
     allowNull: false,
   },

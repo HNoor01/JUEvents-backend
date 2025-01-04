@@ -73,7 +73,7 @@ const createEventRequest = async (req, res) => {
             created_by: student_id,
             status: 'Pending',
             image: imageUrl,
-            attendanceCode, // Add the attendance code
+            attendanceCode,
         });
 
         res.status(201).json(newEvent);
@@ -133,6 +133,36 @@ const getAllEvents = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch events.' });
     }
 };
+
+const getAllEventsAdmin = async (req, res) => {
+    try {
+        const events = await Event.findAll();
+
+        // Create a map to store events by month
+        const eventsByMonth = new Map();
+
+        const monthEvents = {
+            "January": 0, "February": 0, "March": 0, "April": 0,
+            "May": 0, "June": 0, "July": 0, "August": 0,
+            "September": 0, "October": 0, "November": 0, "December": 0
+        };
+
+        // Loop through events to count them by month
+        events.forEach(event => {
+            const eventDate = new Date(event.date);
+            const monthIndex = eventDate.getMonth();
+
+            const monthName = Object.keys(monthEvents)[monthIndex];
+            monthEvents[monthName]++;
+        });
+
+        res.status(200).json(monthEvents);
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).json({ error: 'Failed to fetch events.' });
+    }
+};
+
 
 const viewEventDetails = async (req, res) => {
     try {
@@ -224,4 +254,4 @@ const validateAttendanceCode = async (req, res) => {
         res.status(500).json({ error: 'Failed to validate attendance code.' });
     }
 };
-module.exports = { createEventRequest, respondToEventRequest, viewEventDetails, getAllEvents, validateAttendanceCode };
+module.exports = { createEventRequest, respondToEventRequest, viewEventDetails, getAllEvents, validateAttendanceCode, getAllEventsAdmin };

@@ -43,6 +43,6 @@ const Review = sequelize.define('Review', {
     timestamps: true
 });
 
-//Review.belongsTo(Students, { foreignKey: 'student_id' });
+Review.belongsTo(Students, { foreignKey: 'student_id' });
 
 module.exports = Review;
