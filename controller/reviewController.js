@@ -5,7 +5,7 @@ const Student = require('../models/students');
 const addReview = async (req, res) => {
     try {
         const { event_id } = req.params;
-        const { name, rating, comment, photos } = req.body;
+        const { name, rating, comment, photos, isAttended } = req.body;
         const student_id = req.session.student_id;
 
         if (!student_id) {
@@ -76,8 +76,9 @@ const validateAttendanceCode = async (req, res) => {
         }
 
         // Compare the provided code with the event's attendance code
+        if (event.attendanceCode !== attendanceCode) {
             return res.status(400).json({ error: 'Invalid attendance code.' });
-
+        }
 
         res.status(200).json({ message: 'Attendance confirmed.' });
     } catch (error) {

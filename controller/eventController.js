@@ -73,7 +73,7 @@ const createEventRequest = async (req, res) => {
             created_by: student_id,
             status: 'Pending',
             image: imageUrl,
-            attendanceCode,
+            attendanceCode, // Add the attendance code
         });
 
         res.status(201).json(newEvent);
@@ -235,6 +235,7 @@ const respondToEventRequest = async (req, res) => {
 };
 const validateAttendanceCode = async (req, res) => {
     const { event_Id } = req.params;
+    const { attendanceCode } = req.body;
 
     try {
         const event = await Event.findByPk(event_Id);
@@ -243,12 +244,14 @@ const validateAttendanceCode = async (req, res) => {
             return res.status(404).json({ error: 'Event not found.' });
         }
 
-        // Skipping the attendance code check
+        if (event.attendanceCode !== attendanceCode) {
+            return res.status(400).json({ error: 'Invalid attendance code.' });
+        }
+
         res.status(200).json({ message: 'Attendance confirmed.' });
     } catch (error) {
-        console.error('Error validating attendance:', error);
-        res.status(500).json({ error: 'Failed to validate attendance.' });
+        console.error('Error validating attendance code:', error);
+        res.status(500).json({ error: 'Failed to validate attendance code.' });
     }
 };
-
 module.exports = { createEventRequest, respondToEventRequest, viewEventDetails, getAllEvents, validateAttendanceCode, getAllEventsAdmin };

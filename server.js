@@ -8,17 +8,15 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const interestRoutes = require('./routes/interestRoutes');
 const setupSession = require('./sessionConfig');
+const cors = require('cors');
 const app = express();
-const cors = require('cors'); // Import CORS
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors());
+
 setupSession(app);
-// Use CORS middleware
-app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from your Admin Dashboard
-    credentials: true // Allow cookies and credentials if needed
-}));
+
 // Default Route
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the Event Management API!' });
