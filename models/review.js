@@ -1,46 +1,45 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('./database'); 
+const sequelize = require('./database');
 const Students = require('./students');
-const Events = require('./event'); // Ensure the events model is imported
+const Events = require('./event');
 
 const Review = sequelize.define('Review', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
     student_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: 'students',
-            key: 'student_id'
-        }
+            key: 'student_id',
+        },
     },
     photos: {
-        type: DataTypes.TEXT, // To store comma-separated photo URIs
+        type: DataTypes.TEXT,
         allowNull: true,
     },
-
-    event_id: {
+    eventId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: 'events',
-            key: 'id'
-        }
+            key: 'id',
+        },
     },
     rating: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
     },
     comment: {
         type: DataTypes.TEXT,
-        allowNull: true
-    }
+        allowNull: true,
+    },
 }, {
     tableName: 'reviews',
-    timestamps: true
+    timestamps: true,
 });
 
 Review.belongsTo(Students, { foreignKey: 'student_id' });

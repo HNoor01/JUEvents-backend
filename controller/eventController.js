@@ -1,6 +1,7 @@
 const Event = require('../models/event.js');
 const Notification = require('../models/notification.js');
 const Students = require("../models/students.js");
+const multer = require('multer');
 
 const allowedLocations = ['Nursing', 'Sciences', 'Sharia', 'Medicine',"Arts",
     'Agriculture','Physical Education','IT','Business','Languages','Engineering','Archeology and Tourism',
@@ -23,8 +24,9 @@ const createEventRequest = async (req, res) => {
         }
 
         if (req.file) {
-            imageUrl = `/uploads/${req.file.filename}`;
+            imageUrl = `/uploads/${req.file.filename}`; // Save only the relative path in the database
         }
+        console.log("Image URL saved in database:", imageUrl);
 
         if (!name || !location || !time || !date) {
             return res.status(400).json({ error: 'All fields are required.' });
@@ -126,13 +128,22 @@ const createEventRequest = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
     try {
-        const events = await Event.findAll(); // Fetch all events
-        res.status(200).json(events); // Send them as JSON
+        const events = await Event.findAll(); // Fetch events from the database
+
+        // Map the events and prepend the base URL to the image path
+        const updatedEvents = events.map(event => ({
+            ...event.toJSON(),
+            image: event.image ? `http://192.168.0.108:3000${event.image}` : null, // Dynamically prepend base URL
+        }));
+        console.log("Events fetched with updated image URLs:", updatedEvents);
+
+        res.status(200).json(updatedEvents); // Send updated events with full image URLs
     } catch (error) {
         console.error('Error fetching events:', error);
         res.status(500).json({ error: 'Failed to fetch events.' });
     }
 };
+
 
 const getAllEventsAdmin = async (req, res) => {
     try {
@@ -166,15 +177,23 @@ const getAllEventsAdmin = async (req, res) => {
 
 const viewEventDetails = async (req, res) => {
     try {
-        const event = await Event.findByPk(req.params.event_Id);
+        const event = await Event.findByPk(req.params.eventId);
         if (!event) {
             return res.status(404).json({ error: 'Event not found' });
         }
-        res.status(200).json(event);
+
+        const updatedEvent = {
+            ...event.toJSON(),
+            image: event.image ? `http://192.168.0.108:3000${event.image}` : null, // Dynamically prepend base URL
+        };
+        console.log("Event details fetched with updated image URL:", updatedEvent);
+
+        res.status(200).json(updatedEvent);
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
 
 const respondToEventRequest = async (req, res) => {
     try {
@@ -234,11 +253,11 @@ const respondToEventRequest = async (req, res) => {
     }
 };
 const validateAttendanceCode = async (req, res) => {
-    const { event_Id } = req.params;
+    const { eventId } = req.params;
     const { attendanceCode } = req.body;
 
     try {
-        const event = await Event.findByPk(event_Id);
+        const event = await Event.findByPk(eventId);
 
         if (!event) {
             return res.status(404).json({ error: 'Event not found.' });

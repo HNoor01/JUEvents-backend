@@ -25,9 +25,9 @@ router.post('/', upload.single('image'), createEventRequest);
 router.post('/respond', respondToEventRequest);
 
 // Route to get details of a specific event
-router.get('/:event_Id', viewEventDetails);
+router.get('/:eventId', viewEventDetails);
 
 // Route to validate attendance code for a specific event
-router.post('/:event_Id/validate-attendance', validateAttendanceCode);
+router.post('/:eventId/validate-attendance', validateAttendanceCode);
 
 module.exports = router;

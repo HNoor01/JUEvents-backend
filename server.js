@@ -10,6 +10,7 @@ const interestRoutes = require('./routes/interestRoutes');
 const setupSession = require('./sessionConfig');
 const cors = require('cors');
 const app = express();
+const path = require('path');
 
 // Middleware
 app.use(bodyParser.json());
@@ -21,6 +22,9 @@ setupSession(app);
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the Event Management API!' });
 });
+app.get('/api', (req, res) => {
+    res.json({ message: 'API is working. Available routes: /api/notifications, /api/students, /api/events, etc.' });
+});
 
 // API Routes
 app.use('/api/notifications', notificationRoutes);
@@ -30,6 +34,10 @@ app.use('/api/students', studentsRoutes);
 app.use('/api/interests', interestRoutes);
 app.use('/api/reviews', reviewRoutes);
 
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve the uploads folder
+console.log("Static uploads folder served at /uploads");
 // Port
 const PORT = 3000;
 

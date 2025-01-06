@@ -5,9 +5,9 @@ const Students = require("../models/students.js");
 const addInterest = async (req, res) => {
     try {
         
-        const { event_Id } = req.params; // استخراج ID الحدث من الرابط
+        const { eventId } = req.params; // استخراج ID الحدث من الرابط
         const studentId = req.session.student_id; // استخراج ID المستخدم من الجلسة
-        console.log(`Received eventId: ${event_Id}`);
+        console.log(`Received eventId: ${eventId}`);
 
         // تحقق من تسجيل الدخول
         if (!studentId) {
@@ -15,7 +15,7 @@ const addInterest = async (req, res) => {
         }
 
         // تحقق من وجود الحدث
-        const event = await Event.findByPk(event_Id);
+        const event = await Event.findByPk(eventId);
         if (!event) {
             return res.status(404).json({ error: 'Event not found.' });
         }
@@ -33,7 +33,7 @@ const addInterest = async (req, res) => {
         // إضافة الاهتمام مباشرة
         await Interest.create({
             student_id: studentId,
-            event_id: event_Id,
+            event_id: eventId,
             interest_date: new Date(),
         });
 

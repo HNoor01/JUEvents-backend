@@ -13,7 +13,11 @@ const Event = sequelize.define('Event', {
     allowNull: true,
     defaultValue: Sequelize.NOW,
   },
+  attendanceCode: {
 
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   created_by: {
     type: DataTypes.INTEGER,
     allowNull: true,
@@ -73,11 +77,6 @@ const Event = sequelize.define('Event', {
     values: ['Pending', 'Approved', 'Rejected'], 
     defaultValue: 'Pending',
     allowNull: true,
-  },
-  attendanceCode: {
-    
-    type: DataTypes.STRING,
-    allowNull: false,
   },
   time: {
     type: DataTypes.TIME,

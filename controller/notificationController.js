@@ -1,11 +1,9 @@
 const Notification = require('../models/notification');
 
-
 const addNotification = async (req, res) => {
   try {
     const { student_id, message, notification_type } = req.body;
 
-    
     if (!student_id || !message || !notification_type) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
@@ -15,6 +13,7 @@ const addNotification = async (req, res) => {
       message,
       notification_type,
     });
+    console.log('Notification created:', notification); // Log for debugging
     res.status(201).json(notification);
   } catch (error) {
     console.error('Error adding notification:', error);
@@ -31,31 +30,34 @@ const markAsRead = async (req, res) => {
       return res.status(404).json({ error: 'Notification not found' });
     }
 
-    await Notification.update({ is_read: true }, { where: { notification_id: id } });
-    res.status(200).json({ message: 'Notification marked as read' });
+    notification.is_read = true;
+    await notification.save();
+    res.status(200).json({ message: 'Notification marked as read', notification });
   } catch (error) {
     console.error('Error marking notification as read:', error);
     res.status(500).json({ error: error.message });
   }
 };
 
-
 const getNotificationsByStudent = async (req, res) => {
   try {
     const { student_id } = req.params;
 
- 
-    const notifications = await Notification.findAll({
-      where: { student_id },
-      order: [['created_at', 'DESC']],
-    });
+    if (!student_id) {
+      return res.status(400).json({ error: 'Student ID is missing' });
+    }
+
+    const notifications = await Notification.findAll({ where: { student_id } });
+
+    if (!notifications || notifications.length === 0) {
+      return res.status(200).json([]); // Return an empty array if no notifications exist
+    }
 
     res.status(200).json(notifications);
   } catch (error) {
-    console.error('Error fetching notifications for student:', error);
-    res.status(500).json({ error: error.message });
+    console.error('Error fetching notifications:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 module.exports = { addNotification, markAsRead, getNotificationsByStudent };
-

@@ -5,5 +5,5 @@ const {addInterest} = require('../controller/interestController');
 
 
 
-router.post('/:event_Id', addInterest);
+router.post('/:eventId', addInterest);
 module.exports = router;

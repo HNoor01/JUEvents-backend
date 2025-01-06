@@ -19,7 +19,7 @@ const Interest = sequelize.define('Interest', {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
     },
-    event_id: {
+    eventId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
