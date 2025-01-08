@@ -15,6 +15,10 @@ const Notification = sequelize.define('Notification', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  event_id: { // Add the event_id column here
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
   notification_type: {
     type: DataTypes.ENUM('event_approved', 'event_rejected', 'reminder'),
     allowNull: false,

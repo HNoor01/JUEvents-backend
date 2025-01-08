@@ -22,7 +22,7 @@ router.get('/admin', getAllEventsAdmin);
 router.post('/', upload.single('image'), createEventRequest);
 
 // Route to respond to an event request
-router.post('/respond', respondToEventRequest);
+router.patch('/respond', respondToEventRequest);
 
 // Route to get details of a specific event
 router.get('/:eventId', viewEventDetails);

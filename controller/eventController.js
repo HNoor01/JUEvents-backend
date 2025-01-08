@@ -85,47 +85,6 @@ const createEventRequest = async (req, res) => {
     }
 };
 
-
-
-
-/*const getHomePageEvents = async (req, res) => {
-    try {
-
-        const currentDate = new Date();
-
-
-        const college = req.Students.college;
-
-
-        const forYouEvents = await Event.findAll({
-            where: {
-                status: 'Approved', //
-                date: { [Op.gte]: currentDate },
-                faculty: userFaculty,
-            },
-            order: [['date', 'ASC']],
-        });
-
-        // جلب جميع الأحداث الجامعية المستقبلية
-        const uniWideEvents = await Event.findAll({
-            where: {
-                status: 'Approved', // الحالة: موافق عليها
-                date: { [Op.gte]: currentDate },
-            },
-            order: [['date', 'ASC']],
-        });
-
-        // إعداد الاستجابة بصيغة منظمة
-        res.status(200).json({
-            forYou: forYouEvents,
-            uniWideEvents,
-        });
-    } catch (error) {
-        console.error('Error fetching events:', error);
-        res.status(500).json({ error: 'Failed to load events.' });
-    }
-};*/
-
 const getAllEvents = async (req, res) => {
     try {
         const events = await Event.findAll(); // Fetch events from the database
@@ -195,63 +154,8 @@ const viewEventDetails = async (req, res) => {
 };
 
 
-const respondToEventRequest = async (req, res) => {
-    try {
-        const { eventId, status, adminId, responseNotes, eventType } = req.body;
 
-        if (!eventId || !status || !adminId || !eventType) {
-            return res.status(400).json({
-                error: 'Event ID, status, admin ID, and event type are required.'
-            });
-        }
 
-        if (!['Approved', 'Rejected'].includes(status)) {
-            return res.status(400).json({ error: 'Invalid status. Use "Approved" or "Rejected".' });
-        }
-
-        if (!['Activity', 'Community Service', 'other'].includes(eventType)) {
-            return res.status(400).json({ error: 'Invalid event type. Use "Activity", "Community Service", or "other".' });
-        }
-
-        const event = await Event.findByPk(eventId);
-        if (!event) {
-            return res.status(404).json({ error: 'Event not found.' });
-        }
-
-        event.status = status;
-        event.responded_by = adminId;
-        event.responded_at = new Date();
-        event.response_notes = responseNotes || null;
-        event.event_type = eventType;
-
-        await event.save();
-
-        try {
-            await Notification.create({
-                student_id: event.created_by,
-                message: `Your event "${event.name}" has been ${status.toLowerCase()}.`,
-                notification_type: status === 'Approved' ? 'event_approved' : 'event_rejected',
-                created_at: new Date(),
-                is_read: false,
-            });
-        } catch (notificationError) {
-            console.error('Error sending notification:', notificationError);
-            return res.status(500).json({
-                error: 'Event updated, but failed to send notification.'
-            });
-        }
-
-        res.status(200).json({
-            message: 'Event response updated successfully, and notification sent.',
-            event
-        });
-    } catch (error) {
-        console.error('Error responding to event request:', error);
-        res.status(500).json({
-            error: error.message || 'Failed to respond to event request.'
-        });
-    }
-};
 const validateAttendanceCode = async (req, res) => {
     const { eventId } = req.params;
     const { attendanceCode } = req.body;
@@ -273,4 +177,49 @@ const validateAttendanceCode = async (req, res) => {
         res.status(500).json({ error: 'Failed to validate attendance code.' });
     }
 };
+const respondToEventRequest = async (req, res) => {
+    try {
+        const { eventId, status, notes } = req.body;
+
+        // Validate input
+        if (!eventId || !status) {
+            return res.status(400).json({ error: 'Event ID and status are required.' });
+        }
+
+        // Find the event by ID
+        const event = await Event.findByPk(eventId);
+
+        if (!event) {
+            return res.status(404).json({ error: 'Event not found.' });
+        }
+
+        // Update the event status and response notes
+        event.status = status;
+        event.response_notes = status === 'Rejected' ? notes : null;
+        event.responded_at = new Date();
+        await event.save();
+
+        // Debug: Check event data before creating notification
+        console.log('Event Data:', event);
+
+        // Create a notification linked to the event
+        if (event.created_by) {
+            await Notification.create({
+                student_id: event.created_by, // Link notification to the student who created the event
+                message: `Your event "${event.name}" has been ${status.toLowerCase()}.`,
+                notification_type: `event_${status.toLowerCase()}`, // e.g., event_approved or event_rejected
+                event_id: event.id, // Link the notification to the event
+                is_read: false,
+            });
+        }
+
+        res.status(200).json({ message: `Event has been ${status.toLowerCase()}.`, event });
+    } catch (error) {
+        console.error('Error responding to event:', error);
+        res.status(500).json({ error: 'Failed to update event status.' });
+    }
+};
+
+
+
 module.exports = { createEventRequest, respondToEventRequest, viewEventDetails, getAllEvents, validateAttendanceCode, getAllEventsAdmin };

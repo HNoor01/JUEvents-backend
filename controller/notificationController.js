@@ -47,17 +47,95 @@ const getNotificationsByStudent = async (req, res) => {
       return res.status(400).json({ error: 'Student ID is missing' });
     }
 
-    const notifications = await Notification.findAll({ where: { student_id } });
+    const notifications = await Notification.findAll({
+      where: { student_id },
+    });
 
     if (!notifications || notifications.length === 0) {
-      return res.status(200).json([]); // Return an empty array if no notifications exist
+      return res.status(404).json({ error: 'No notifications found for this student.' });
     }
 
-    res.status(200).json(notifications);
+    // Map database fields to frontend-friendly format
+    const response = notifications.map((notification) => ({
+      id: notification.id,
+      studentId: notification.student_id,
+      message: notification.message,
+      notificationType: notification.notification_type,
+      eventId: notification.event_id, // Map event_id to eventId
+      isRead: notification.is_read,
+      createdAt: notification.created_at,
+    }));
+
+    res.status(200).json(response);
   } catch (error) {
     console.error('Error fetching notifications:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-module.exports = { addNotification, markAsRead, getNotificationsByStudent };
+
+const getUnreadNotificationsCount = async (req, res) => {
+  try {
+    const { student_id } = req.params;
+
+    if (!student_id) {
+      return res.status(400).json({ error: 'Student ID is missing.' });
+    }
+
+    const unreadCount = await Notification.count({
+      where: { student_id, is_read: false },
+    });
+
+    res.status(200).json({ unreadCount });
+  } catch (error) {
+    console.error('Error fetching unread notifications count:', error);
+    res.status(500).json({ error: 'Failed to fetch unread notifications count.' });
+  }
+};
+
+const markMultipleAsRead = async (req, res) => {
+  console.log('Request body:', req.body); // Log the incoming request body
+  try {
+    const { studentId } = req.body;
+
+    if (!studentId) {
+      console.log('No student ID provided.'); // Debugging log
+      return res.status(400).json({ error: 'Student ID is required.' });
+    }
+
+    console.log('Student ID received:', studentId); // Debugging log
+
+    // Fetch notifications for the student
+    const notifications = await Notification.findAll({
+      where: { student_id: studentId },
+    });
+
+    console.log('Notifications found:', notifications); // Log fetched notifications
+
+    if (notifications.length === 0) {
+      return res.status(404).json({ error: 'No notifications found for this student.' });
+    }
+
+    // Mark notifications as read
+    await Notification.update(
+        { is_read: true },
+        { where: { student_id: studentId } }
+    );
+
+    res.status(200).json({ message: 'Notifications marked as read.' });
+  } catch (error) {
+    console.error('Error marking notifications as read:', error);
+    res.status(500).json({ error: 'Failed to mark notifications as read.' });
+  }
+};
+
+
+
+
+module.exports = {
+  getUnreadNotificationsCount,
+  markMultipleAsRead,
+  addNotification,
+  markAsRead,
+  getNotificationsByStudent,
+};

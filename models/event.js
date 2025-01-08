@@ -76,7 +76,7 @@ const Event = sequelize.define('Event', {
     type: DataTypes.ENUM,
     values: ['Pending', 'Approved', 'Rejected'], 
     defaultValue: 'Pending',
-    allowNull: true,
+    allowNull: false,
   },
   time: {
     type: DataTypes.TIME,
