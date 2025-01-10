@@ -92,7 +92,7 @@ const getAllEvents = async (req, res) => {
         // Map the events and prepend the base URL to the image path
         const updatedEvents = events.map(event => ({
             ...event.toJSON(),
-            image: event.image ? `http://192.168.0.108:3000${event.image}` : null, // Dynamically prepend base URL
+            image: event.image ? `http://192.168.0.129:3000${event.image}` : null, // Dynamically prepend base URL
         }));
         console.log("Events fetched with updated image URLs:", updatedEvents);
 
@@ -143,15 +143,17 @@ const viewEventDetails = async (req, res) => {
 
         const updatedEvent = {
             ...event.toJSON(),
-            image: event.image ? `http://192.168.0.108:3000${event.image}` : null, // Dynamically prepend base URL
+                        status: event.status || 'Pending', // Default to 'Pending'
+            image: event.image ? `http://192.168.0.129:3000${event.image}` : null, // Dynamically prepend base URL
         };
-        console.log("Event details fetched with updated image URL:", updatedEvent);
 
+        console.log("Event details fetched with updated image URL:", updatedEvent);
         res.status(200).json(updatedEvent);
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
 
 
 
